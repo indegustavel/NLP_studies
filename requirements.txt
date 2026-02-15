@@ -2,3 +2,6 @@ spacy
 nltk
 scikit-learn
 pandas
+torch
+matplotlib
+gensim
