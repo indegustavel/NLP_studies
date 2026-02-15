@@ -54,8 +54,6 @@ def plotar_grafico(model, top_n = 20):
 
 # print(texto_tokenizado)
 
-
-
 #Usando modelo word2vec da biblioteca gensim (nível altísimo de abstração)
 #Vector_size maiores capturam mais nuances, mas precisam de muito texto para treino
 #window maiores focam em semântica, menores focam em sintaxe.
@@ -63,16 +61,57 @@ def plotar_grafico(model, top_n = 20):
 #epoch é quantas vezes o modelo vai ser seu dataset inteiro. Como temos poucas palavras, é recomendado que seja bastante.
 #compute loss para vermos a taxa de erro do modelo
 #workers é a quantidade de núcleos que seu pc vai usar para treinar o modelo
-model = Word2Vec(sentences=texto_tokenizado, vector_size=103, window=7, min_count = 5, sg=0, epochs = 7, compute_loss = True, workers = 4)
+model = Word2Vec(sentences=texto_tokenizado, vector_size=36, window=6, min_count = 4, sg=1, epochs = 270, compute_loss = True, workers = 4, alpha = 0.01, hs = 1, min_alpha = 0.0001)
 
 #Executando modelo para verificar vetores da palavra "bentinho"
 vector = model.wv['bentinho']
 
-#função de ver a loss
-loss_final = model.get_latest_training_loss()
-print(f"Erro final acumulado: {loss_final}")
 #print('Vetores da palavra "bentinho": ', vector)
-print('\n\nPalavras mais parecidas com "bentinho"', model.wv.most_similar('bentinho'))
 
-plotar_grafico(model)
+#função de ver a loss
 
+# --- FORMATAÇÃO DE SAÍDA ---
+
+def imprimir_cabecalho(titulo):
+    print("\n" + "="*50)
+    print(f" {titulo.upper()} ".center(50, " "))
+    print("="*50)
+
+# 1. Erro de Treinamento
+imprimir_cabecalho("Status do Treinamento")
+loss_final = model.get_latest_training_loss()
+print(f" Loss Acumulada:  {loss_final:,.2f}".replace(",", "."))
+print(f" Épocas concluídas: {model.epochs}")
+
+# 2. Perfil Semântico: Bentinho
+imprimir_cabecalho("Perfil de 'Bentinho'")
+print(f"{'PALAVRA':<15} | {'SIMILARIDADE':>12}")
+print("-" * 30)
+for palavra, score in model.wv.most_similar('bentinho'):
+    print(f"{palavra:<15} | {score:>12.4f}")
+
+# 3. O Grande Embate (Similaridade)
+imprimir_cabecalho("O Teste da Traição")
+sim_marido = model.wv.similarity('bentinho', 'capitú')
+sim_amigo = model.wv.similarity('escobar', 'capitú')
+
+print(f" Bentinho + Capitú: {sim_marido:.4f}")
+print(f" Escobar  + Capitú: {sim_amigo:.4f}")
+print("-" * 50)
+veredito = " ALERTA: Proximidade Suspeita!" if sim_amigo > sim_marido else " Calma: Laços Conjugais Fortes."
+print(veredito.center(50))
+
+# 4. Álgebra Vetorial
+imprimir_cabecalho("Álgebra Proibida")
+print("> Equação: (Capitú + Escobar) - Bentinho\n")
+
+resultado = model.wv.most_similar(
+    positive=['capitú', 'escobar'], 
+    negative=['bentinho'], 
+    topn=10
+)
+
+print(f"{'RANK':<5} | {'CONCEITO':<15} | {'SCORE':>10}")
+for i, (palavra, score) in enumerate(resultado, 1):
+    print(f"{i:<5} | {palavra:<15} | {score:>10.4f}")
+print("="*50)
