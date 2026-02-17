@@ -4,7 +4,7 @@ Apesar de ser uma pessoa que se sente melhor em posições não tão técnicas e
 
 Já vinha pensando nessa iniciativa a algum tempo, mas o ponto de partida foi o curso de Resolução de problemas com Processamento de Linguagem Natural do AKCIT (Advanced Knowledge Center for Immersive Technologies). Nele, exporamos os conceitos de NLP, como funciona, etc. E eu resolvi partir daqui para estudar mais a fundo.
 
-Já tenho um conhecimento básico sobre alguns conceitos de NLP, como RNNs, LSTM, Bi LSTM, Attention e Transformers. Porém decidi começar esse repositório pelo básico para construir o prédio da fundação.
+Já tenho um conhecimento básico sobre alguns conceitos de NLP, como RNNs, LSTM, Bi LSTM, Attention e Transformers. Porém decidi começar esse repositório pelo básico para construir o prédio da fundação e fixar meus conhecimento.
 
 
 
