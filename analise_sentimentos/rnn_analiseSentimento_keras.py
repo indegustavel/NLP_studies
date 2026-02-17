@@ -1,30 +1,22 @@
 # RNN básica utilizando Keras para aplicar análise de sentimentos
 
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # Limpa avisos chatos do TensorFlow
+
 import keras
 from keras import layers
 
 import numpy as np
 
-#nosso dataset (keras 3 não aceita lista, temos que usar o np.array por isso)
-textos_treino = np.array([
-    "este filme é excelente e muito bom",
-    "que porcaria de roteiro horrível",
-    "amei cada segundo da atuação",
-    "perdi meu tempo assistindo isso",
-    "favorito da vida recomendo muito",
-    "odiei a história e os atores",
-    "é o melhor filme que já vi na minha vida",
-    "que filme ridículo",
-    "achei mediano",
-    "filme muito ruim",
-    "gostei bastante"
-], dtype=object)
+from gerar_dataset import gerar_dataset_gigante
 
-#
-labels = np.array([1, 0, 1, 0, 1, 0, 1, 0, 0.5, 0 , 1])
 
-max_palavras = 1000 #tamanho do vocabulário
-tamanho_sequencia = 10 #quantos termos ler por frase
+max_palavras = 20000 #tamanho do vocabulário
+tamanho_sequencia = 200 #quantos termos ler por frase
+
+print("Gerando dataset massivo...")
+
+textos_treino, labels = gerar_dataset_gigante(n_amostras=50000)
 
 # Aqui, abstraimos a normalização, padronização, tokenização e indexação do dataset. 
 #é interessante pontuar que, como as frases tem tamanhos diferentes, essa camada preenche com zeros ( 0 ) as frases para que todos inputs tenham o mesmo tamanho (tamanho_sequencia)
@@ -46,8 +38,8 @@ model = keras.Sequential([
     #transformando string em números
     vectorizer,
 
-    # Embedding: Transforma inteiros em vetores de 32 posições
-    layers.Embedding(input_dim=1000, output_dim=32),
+    # transformando números em vetores densos
+    layers.Embedding(input_dim = max_palavras, output_dim = 64),
 
     # A RNN recebe a saída do Embedding
     layers.SimpleRNN(units=64),
@@ -60,13 +52,18 @@ model = keras.Sequential([
 #compilando o modelo
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-#treinando rede neural com nosso dataset
-model.fit(textos_treino, labels, epochs=10)
+
+print("\nIniciando o treino")
+
+#treinando rede neural com nosso dataset.
+# Convertendo para numpy array com dtype='object' para evitar problemas com strings Unicode longas
+# O Keras precisa de numpy array para usar validation_split
+textos_array = np.array([str(texto) for texto in textos_treino], dtype='object')
+model.fit(textos_array, labels, epochs=1, batch_size=64, validation_split=0.2, verbose=1)
 
 #aplicando no novo texto
-frase_nova = np.array(["gostei"], dtype = "object")
+frase_nova = np.array(["esse filme é ruim"], dtype = "object")
 
 previsao = model.predict(frase_nova)
 
-print(f"\nResultado da previsão (0 a 1): {previsao[0][0]:.4f}")
-print("Sentimento: Positivo" if previsao > 0.5 else "Sentimento: Negativo")
+print(previsao[0][0])

@@ -23,4 +23,3 @@ def gerar_dataset_gigante(n_amostras=100000):
 # Isso garante que o código só rode se você executar o arquivo diretamente
 if __name__ == "__main__":
     t, l = gerar_dataset_gigante(10)
-    print("Teste de geração concluído!")
