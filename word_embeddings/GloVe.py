@@ -4,7 +4,7 @@ import spacy
 import requests
 
 #Carregar o modelo (o 'md' contém ~20 mil vetores únicos para 685k palavras)
-nlp = spacy.load("pt_core_news_md")
+nlp = spacy.load("pt_core_news_sm")
 
 print("Baixando Dom Casmurro")
 url = "https://www.gutenberg.org/cache/epub/55752/pg55752.txt"

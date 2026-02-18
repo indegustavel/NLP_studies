@@ -3,7 +3,7 @@
 #Calculando TF
 
 #Definição dos documentos
-documentos = ["O rato roeu a roupa do rei de roma", "O cavaleiro está apressado", "A dama chora ao amanhecer", "Esse problema não é meu", "O gato caça os ratos", "Os cachorros caçam os gatos"]
+documentos = ["mãe aném", "O rato roeu a roupa do rei de roma",  "Os cachorros caçam os gatos", "a velha", "a mãe", "minha mãe é legal"]
 
 #função de normalizar os documentos
 def tratamento(frase):

@@ -61,7 +61,9 @@ def plotar_grafico(model, top_n = 20):
 #epoch é quantas vezes o modelo vai ser seu dataset inteiro. Como temos poucas palavras, é recomendado que seja bastante.
 #compute loss para vermos a taxa de erro do modelo
 #workers é a quantidade de núcleos que seu pc vai usar para treinar o modelo
-model = Word2Vec(sentences=texto_tokenizado, vector_size=36, window=6, min_count = 4, sg=1, epochs = 270, compute_loss = True, workers = 4, alpha = 0.01, hs = 1, min_alpha = 0.0001)
+model = Word2Vec(sentences=texto_tokenizado, vector_size=30, window=6, min_count = 4, sg=1, epochs = 100, compute_loss = True, workers = 4)
+
+
 
 #Executando modelo para verificar vetores da palavra "bentinho"
 vector = model.wv['bentinho']

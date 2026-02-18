@@ -33,10 +33,9 @@ Exemplo: ("__ amo ____"). A rede neural tenta adivinhar o que colocar em volta p
 Com isso, a rede neural, normalmente treinada com quantidades massivas de dados, consegue estabelecer um valor semântico a cada palavra, de acordo com o contexto que ela normalmente vê essa palavra.
 
 -> O *Rei* sentou no trono.
--> A *Rainha" sentou no trono.
+-> A *Rainha* sentou no trono.
 
 O algoritmo word2vec detecta que há uma relação semântica forte entre rei e rainha, porque o contexto em que ambos são usados são semelhantes. (Diferente de computador, por exemplo, visto que é raro você ler que um *computador* sentou no trono, rsss)
-
 
 Observação: Como a rede sabe se a palavra que ela previu é um acerto ou um erro? Por meio da Loss Function, Backpropagation e Gradiente Descendente. 
 
@@ -88,4 +87,3 @@ Como o resultado é muito grande, indica que a palavra sólido é muito mais lig
 Caso inverso: Se fizéssemos P(gás/gelo) / P (gás/vapor), veríamos que seria uma razão de um valor pequeno e um valor grande, o que resultaria em um número próximo de 0. Isso implicaria que a palavra "vapor" está no contexto de "gás", mas não de gelo.
 
 Caso neutro: Se fizéssemo P(moda/gelo) / P(moda/vapor), veríamos que seria uma razão de números pequenos e semelhantes, resultando em algo próximo de 1. Isso significa quem ambos os termos não tem relação com a palavra alvo. Se a palavra fosse "água", ambos as probabilidades condicionais seriam altas, fazendo com que a divisão também seja próximo de 1, o que não serviria para diferenciar os dois conceitos.
-
