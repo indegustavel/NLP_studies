@@ -59,7 +59,7 @@ print("\nIniciando o treino")
 # Convertendo para numpy array com dtype='object' para evitar problemas com strings Unicode longas
 # O Keras precisa de numpy array para usar validation_split
 textos_array = np.array([str(texto) for texto in textos_treino], dtype='object')
-model.fit(textos_array, labels, epochs=1, batch_size=64, validation_split=0.2, verbose=1)
+model.fit(textos_array, labels, epochs=3, batch_size=64, validation_split=0.2, verbose=1)
 
 #aplicando no novo texto
 frase_nova = np.array(["esse filme é ruim"], dtype = "object")
