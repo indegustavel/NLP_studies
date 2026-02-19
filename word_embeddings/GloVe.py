@@ -148,3 +148,5 @@ for p1, p2 in duplas:
 print("\nPalavras mais próximas de 'capitú':")
 for pal, score in mais_proximas("capitú"):
     print(f" -> {pal}: {score:.4f}")
+
+print("\nPor algum motivo, ciúmes não está sendo contado. Deixo ai o desafio para você, rsrs")
