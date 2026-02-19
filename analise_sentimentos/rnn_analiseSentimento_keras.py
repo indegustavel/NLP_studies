@@ -12,11 +12,11 @@ from gerar_dataset import gerar_dataset_gigante
 
 
 max_palavras = 20000 #tamanho do vocabulário
-tamanho_sequencia = 200 #quantos termos ler por frase
+tamanho_sequencia = 900 #quantos termos ler por frase
 
 print("Gerando dataset massivo...")
 
-textos_treino, labels = gerar_dataset_gigante(n_amostras=50000)
+textos_treino, labels = gerar_dataset_gigante(n_amostras=10000)
 
 # Aqui, abstraimos a normalização, padronização, tokenização e indexação do dataset. 
 #é interessante pontuar que, como as frases tem tamanhos diferentes, essa camada preenche com zeros ( 0 ) as frases para que todos inputs tenham o mesmo tamanho (tamanho_sequencia)
@@ -42,7 +42,7 @@ model = keras.Sequential([
     layers.Embedding(input_dim = max_palavras, output_dim = 64),
 
     # A RNN recebe a saída do Embedding
-    layers.SimpleRNN(units=64),
+    layers.SimpleRNN(units=32),
 
     # Sigmoid é para classificação binária. 
     layers.Dense(1, activation='sigmoid')
@@ -66,4 +66,4 @@ frase_nova = np.array(["esse filme é ruim"], dtype = "object")
 
 previsao = model.predict(frase_nova)
 
-print(previsao[0][0])
+print("A sua frase é:", previsao[0][0])
