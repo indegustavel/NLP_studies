@@ -3,6 +3,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # Limpa avisos chatos do TensorFlow
 import keras
 from keras import layers
 import numpy as np
+import tensorflow as tf
 
 #Definindo tamanho das frases
 max_palavras = 10000 # 20k palavras mais frequentes

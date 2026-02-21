@@ -1,71 +1,37 @@
-# RNN básica utilizando Keras para aplicar análise de sentimentos
-
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' # Limpa avisos chatos do TensorFlow
-
 import keras
 from keras import layers
-
 import numpy as np
+import tensorflow as tf
 
-from gerar_dataset import gerar_dataset_gigante
+#Definindo tamanho das frases
+max_palavras = 10000 # 20k palavras mais frequentes
+tamanho_sequencia = 800 #ler as primeiras 900 palavras de cada crítica
 
+#carregando dataset nativo do Keras (IMDB)
+(x_train, y_train), (x_val, y_val) = keras.datasets.imdb.load_data(num_words=max_palavras)
 
-max_palavras = 10000 #tamanho do vocabulário
-tamanho_sequencia = 800 #quantos termos ler por frase
+# precisamos uniformizar para o tamanho_sequencia (200)
+x_train = keras.utils.pad_sequences(x_train, maxlen=tamanho_sequencia)
+x_val = keras.utils.pad_sequences(x_val, maxlen=tamanho_sequencia)
 
-print("Gerando dataset massivo...")
-
-textos_treino, labels = gerar_dataset_gigante(n_amostras=10000)
-
-# Aqui, abstraimos a normalização, padronização, tokenização e indexação do dataset. 
-#é interessante pontuar que, como as frases tem tamanhos diferentes, essa camada preenche com zeros ( 0 ) as frases para que todos inputs tenham o mesmo tamanho (tamanho_sequencia)
-
-vectorizer = layers.TextVectorization(
-    max_tokens = max_palavras,
-    output_mode = 'int',
-    output_sequence_length = tamanho_sequencia
-)
-
-vectorizer.adapt(textos_treino)
-
-#Definindo arquitetura
+#Arquitetura
 model = keras.Sequential([
+    #definindo o input como sendo os números do IMDB
+    layers.Input(shape=(tamanho_sequencia,)), 
 
-    #expondo ao keras o formato do input (string)
-    layers.Input(shape=(1,), dtype = "string"), 
+    # input_dim tem que ser igual ao max_palavras
+    layers.Embedding(input_dim=max_palavras, output_dim=128),
 
-    #transformando string em números
-    vectorizer,
+    layers.SimpleRNN(units=64, dropout=0.2),
 
-    # transformando números em vetores densos
-    layers.Embedding(input_dim = max_palavras, output_dim = 64),
-
-    # A RNN recebe a saída do Embedding
-    layers.SimpleRNN(units=32),
-
-    layers.Dense(32, activation='relu')
-
-    # Sigmoid é para classificação binária. 
+    layers.Dense(32, activation='relu'),
+    #definindo função de ativação (sigmoid)
     layers.Dense(1, activation='sigmoid')
-
 ])
 
-#compilando o modelo
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-
-print("\nIniciando o treino")
-
-#treinando rede neural com nosso dataset.
-# Convertendo para numpy array com dtype='object' para evitar problemas com strings Unicode longas
-# O Keras precisa de numpy array para usar validation_split
-textos_array = np.array([str(texto) for texto in textos_treino], dtype='object')
-model.fit(textos_array, labels, epochs=3, batch_size=64, validation_split=0.2, verbose=1)
-
-#aplicando no novo texto
-frase_nova = np.array(["esse filme é ruim"], dtype = "object")
-
-previsao = model.predict(frase_nova)
-
-print("A sua frase é:", previsao[0][0])
+#trainando o modelo, definindo epochs, batch_size e distinguindo dados de treino e dados de teste
+model.fit(x_train, y_train, epochs=1, batch_size=64, validation_data=(x_val, y_val))
