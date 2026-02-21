@@ -5,8 +5,8 @@ from keras import layers
 import numpy as np
 
 #Definindo tamanho das frases
-max_palavras = 20000 # 20k palavras mais frequentes
-tamanho_sequencia = 900 #ler as primeiras 900 palavras de cada crítica
+max_palavras = 10000 # 20k palavras mais frequentes
+tamanho_sequencia = 800 #ler as primeiras 900 palavras de cada crítica
 
 #carregando dataset nativo do Keras (IMDB)
 (x_train, y_train), (x_val, y_val) = keras.datasets.imdb.load_data(num_words=max_palavras)
@@ -34,4 +34,4 @@ model = keras.Sequential([
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
 #trainando o modelo, definindo epochs, batch_size e distinguindo dados de treino e dados de teste
-model.fit(x_train, y_train, epochs=2, batch_size=64, validation_data=(x_val, y_val))
+model.fit(x_train, y_train, epochs=1, batch_size=64, validation_data=(x_val, y_val))

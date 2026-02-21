@@ -11,8 +11,8 @@ import numpy as np
 from gerar_dataset import gerar_dataset_gigante
 
 
-max_palavras = 20000 #tamanho do vocabulário
-tamanho_sequencia = 900 #quantos termos ler por frase
+max_palavras = 10000 #tamanho do vocabulário
+tamanho_sequencia = 800 #quantos termos ler por frase
 
 print("Gerando dataset massivo...")
 
@@ -43,6 +43,8 @@ model = keras.Sequential([
 
     # A RNN recebe a saída do Embedding
     layers.SimpleRNN(units=32),
+
+    layers.Dense(32, activation='relu')
 
     # Sigmoid é para classificação binária. 
     layers.Dense(1, activation='sigmoid')
